@@ -92,7 +92,7 @@ class SLAM_ASR(nn.Module):
 
         self.prompt_part1 = """User:"""
         self.prompt_part2 = (
-            """transcribe it.\nAssistant:"""
+            """transcribe the audio to text.\nAssistant:"""
         )
         self.embed_bank = {"embed1": None, "embed2": None, "att1": None, "att2": None}
         self.set_embed_bank()
@@ -134,10 +134,10 @@ class SLAM_ASR(nn.Module):
 
         # precache the embeddings for prompt
         with torch.no_grad():
-            inputs_embeds1 = self.language_model.rwkv.get_input_embeddings()(
+            inputs_embeds1 = self.language_model.model.embed_tokens(
                 input_dict1.input_ids
             )
-            inputs_embeds2 = self.language_model.rwkv.get_input_embeddings()(
+            inputs_embeds2 = self.language_model.model.embed_tokens(
                 input_dict2.input_ids
             )
         self.embed_bank["embed1"] = inputs_embeds1
@@ -207,7 +207,7 @@ class SLAM_ASR(nn.Module):
                 truncation=True,
                 add_special_tokens=False,
             ).to(self.device)
-            labels_embeds = self.language_model.rwkv.get_input_embeddings()(_labels.input_ids)
+            labels_embeds = self.language_model.model.embed_tokens(_labels.input_ids)
             att3 = _labels.attention_mask
             
             # print(embed1.shape)
@@ -263,10 +263,10 @@ class SLAM_ASR(nn.Module):
         Generate the transcription
         """
         prompt_embed, prompt_mask, _ = self._prepare_input_embeds(audios)
-        
-        outputs = self.language_model(
+        outputs = self.language_model.generate(
             inputs_embeds=prompt_embed,
-            attention_mask=prompt_mask.bool()
+            attention_mask=prompt_mask,
+            stopping_criteria=stopping_criteria,
         )
         return outputs
 
