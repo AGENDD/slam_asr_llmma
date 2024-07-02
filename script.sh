@@ -1,5 +1,5 @@
 CUDA_VISIBLE_DEVICES=0,1,2,3 accelerate launch --num_processes 1 --mixed_precision fp16 finetune.py \
-    --dataset mozilla-foundation/common_voice_13_0 \
+    --dataset librispeech_asr \
     --split clean \
     --output_dir ./output \
     --logging_steps 1 \

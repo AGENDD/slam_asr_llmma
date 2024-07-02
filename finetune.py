@@ -155,11 +155,12 @@ def make_data_module(tokenizer: transformers.PreTrainedTokenizer, args) -> Dict:
         def map_to_array(batch):
             # Adapted to librispeech dataset
             # speech, _ = sf.read(batch["file"])
-
-            audio_data_resampled = resampy.resample(batch["audio"]["array"], 48000, 16000)
+            audio_data_resampled = batch["audio"]["array"]
+            # audio_data_resampled = resampy.resample(batch["audio"]["array"], 48000, 16000)
             
             batch["speech"] = audio_data_resampled
-            batch['text'] = batch["sentence"]
+            # batch['text'] = batch["sentence"]
+            batch['text'] = batch["text"].lower()
             return batch
 
         print(f"dataset: {dataset}")
@@ -206,12 +207,19 @@ def make_data_module(tokenizer: transformers.PreTrainedTokenizer, args) -> Dict:
     else:
         print("load original data")
         # dataset = load_from_disk(args.dataset)
-        dataset = load_dataset(args.dataset,LANG, token=token)
-        # train_data, test_data = train_test_split(dataset, test_size=0.2)
+        # dataset = load_dataset(args.dataset,LANG, token=token)
+        dataset = load_dataset(args.dataset,"Train.360")
+        train_data, test_data = train_test_split(dataset, test_size=0.1)
+        # dataset = DatasetDict(
+        #     {
+        #         "train": dataset["train"],
+        #         "test": dataset['test'],
+        #     }
+        # )
         dataset = DatasetDict(
             {
-                "train": dataset["train"],
-                "test": dataset['test'],
+                "train": train_data,
+                "test": test_data,
             }
         )
         dataset = format_dataset(dataset)
