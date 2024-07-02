@@ -75,7 +75,7 @@ class SLAM_ASR(nn.Module):
             hidden_dim=hidden_dim,
             train_mode=train_mode,
             device=device,
-        )
+        ).to(self.device)
       
         
         # print("show language params")
