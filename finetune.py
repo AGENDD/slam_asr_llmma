@@ -164,7 +164,7 @@ def make_data_module(tokenizer: transformers.PreTrainedTokenizer, args) -> Dict:
         print(f"dataset: {dataset}")
         dataset = dataset.map(
             map_to_array,
-            num_proc=8,
+            num_proc=6,
             # remove_columns=dataset.column_names["train"]
             remove_columns=['file', 'audio', 'speaker_id', 'chapter_id', 'id']
         )
