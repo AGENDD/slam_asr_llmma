@@ -182,7 +182,7 @@ def make_data_module(tokenizer: transformers.PreTrainedTokenizer, args) -> Dict:
             # 否则，返回True
             return True
 
-        dataset = dataset.filter(check_duration)
+        dataset = dataset.filter(check_duration,num_proc=8)
         # dataset.save_to_disk(temp_dataset_file)
 
         return dataset
