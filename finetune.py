@@ -210,6 +210,12 @@ def make_data_module(tokenizer: transformers.PreTrainedTokenizer, args) -> Dict:
         # dataset = load_dataset(args.dataset,LANG, token=token)
         dataset = load_dataset(args.dataset,"clean",split="train.360")
         train_data, test_data = train_test_split(dataset, test_size=0.1)
+        
+        print(train_data)
+        print(type(train_data))
+        print(test_data)
+        print(type(test_data))
+        exit(0)
         # dataset = DatasetDict(
         #     {
         #         "train": dataset["train"],
