@@ -60,7 +60,7 @@ def get_accelerate_model(args, checkpoint_dir):
 
     model = SLAM_ASR(
         speech_encoder_model_id ="facebook/hubert-base-ls960",
-        language_model_id="openlm-research/open_llama_3b",
+        language_model_id="openlm-research/open_llama_7b",
         # language_model_id="temp_models/rwkv-6-world-1b6",
         train_mode="adapter",
         token = token,
@@ -155,6 +155,7 @@ def make_data_module(tokenizer: transformers.PreTrainedTokenizer, args) -> Dict:
         def map_to_array(batch):
             # Adapted to librispeech dataset
             # speech, _ = sf.read(batch["file"])
+
             audio_data_resampled = resampy.resample(batch["audio"]["array"], 48000, 16000)
             
             batch["speech"] = audio_data_resampled
@@ -326,6 +327,9 @@ def train():
 
     # 4. 加载训练器
     training_args.gradient_clip_val = 30
+    training_args.deepspeed = 'ds_config.json'
+    
+    
     trainer = Seq2SeqTrainer(
         model=model,
         tokenizer=tokenizer,

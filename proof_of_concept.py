@@ -13,10 +13,19 @@ from playsound import playsound
 
 torch.cuda.set_device(1)
 
+from jiwer import wer
+
+def calculate_wer(predictions, references):
+    total_wer = 0.0
+    for pred, ref in zip(predictions, references):
+        total_wer += wer(ref, pred)
+    average_wer = total_wer / len(predictions)
+    return average_wer
+
 asr = SLAM_ASR(
     speech_encoder_model_id ="facebook/hubert-base-ls960",
-    # language_model_id="openlm-research/open_llama_3b",
-    language_model_id="temp_models/rwkv-6-world-1b6",
+    language_model_id="openlm-research/open_llama_3b",
+    # language_model_id="temp_models/rwkv-6-world-1b6",
     train_mode="adapter",
 )
 # load the state_dict from output/adapter_weights.pt
@@ -31,10 +40,14 @@ def map_to_array(batch):
     return batch
 
 
-ds = load_dataset("mozilla-foundation/common_voice_13_0","zh-CN")
+ds = load_dataset("mozilla-foundation/common_voice_13_0","en")
 
 ds = ds['validation'].select(range(100))
 ds = ds.map(map_to_array)
+
+
+predictions = []
+references = []
 
 # with open("temp_audio/text.txt",'w') as f:
 for i in range(len(ds)):
@@ -42,24 +55,18 @@ for i in range(len(ds)):
     z = ds[i]["text"]
     # asr(x)
     
-    
-    # print(f"speech:{len(x)}")
-    output = asr.generate(x)["logits"][0]  # causal of shape (b, seq_len, vocab_size)
-    # print(output.shape)
-    # print(f"output:{output}")
-    
-    token_ids = output.argmax(dim=-1)
-    output = asr.language_tokenizer.decode(token_ids)
+
+    output = asr.generate(x)  # causal of shape (b, seq_len, vocab_size)
+
+    output = asr.language_tokenizer.batch_decode(output)[0]
     output = output.replace("[PAD]","")
     print(f"Predicted: {output}")
     print(f"Source:{z}")
-    print("\n\n")
-        
-        # f.write(f"Predicted: {output}\n")
-        # f.write(f"Reference: {y}\n")
-        # f.write(f"Source:{z}")
-        # f.write("\n\n")
-        
-        # sf.write(f'temp_audio/temp{i}.wav', x, 16000)
-        # playsound('temp.wav')
-        # os.remove('temp.wav')
+    print("\n")
+    
+    predictions.append(output)
+    references.append(z)
+    
+average_wer = calculate_wer(predictions, references)
+print(f"Average WER: {average_wer}")    
+    

@@ -52,7 +52,7 @@ class SLAM_ASR(nn.Module):
             language_model_id,
             trust_remote_code=True,
             # token = token
-        ).to(self.device)
+        )
         # self.language_model = AutoModelForCausalLM.from_pretrained("temp_models/rwkv-6-world-1b6", trust_remote_code=True)
         
         # self.language_tokenizer.add_special_tokens({'pad_token': '[PAD]'})
@@ -75,7 +75,7 @@ class SLAM_ASR(nn.Module):
             hidden_dim=hidden_dim,
             train_mode=train_mode,
             device=device,
-        ).to(self.device)
+        )
       
         
         # print("show language params")

@@ -1,0 +1,19 @@
+{
+    "zero_optimization": {
+      "stage": 2,
+      "offload_optimizer": {
+        "device": "cpu",
+        "pin_memory": true
+      }
+    },
+    "fp16": {
+      "enabled": true
+    },
+    "activation_checkpointing": {
+      "partition_activations": true,
+      "cpu_checkpointing": true,
+      "contiguous_memory_optimization": true,
+      "number_checkpoints": 3
+    }
+  }
+  
