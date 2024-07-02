@@ -127,10 +127,10 @@ class SLAM_ASR(nn.Module):
     def set_embed_bank(self, batch_size=1):
         input_dict1 = self.language_tokenizer(
             [self.prompt_part1], return_tensors="pt"
-        ).to(self.device)
+        )
         input_dict2 = self.language_tokenizer(
             [self.prompt_part2], return_tensors="pt", add_special_tokens=False
-        ).to(self.device)
+        )
 
         # precache the embeddings for prompt
         with torch.no_grad():
@@ -140,6 +140,11 @@ class SLAM_ASR(nn.Module):
             inputs_embeds2 = self.language_model.model.embed_tokens(
                 input_dict2.input_ids
             )
+        input_dict1.to(self.device)
+        input_dict2.to(self.device)
+        inputs_embeds1.to(self.device)
+        inputs_embeds2.to(self.device)
+        
         self.embed_bank["embed1"] = inputs_embeds1
         self.embed_bank["embed2"] = inputs_embeds2
         self.embed_bank["att1"] = input_dict1.attention_mask
