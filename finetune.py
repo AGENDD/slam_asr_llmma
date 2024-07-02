@@ -159,15 +159,14 @@ def make_data_module(tokenizer: transformers.PreTrainedTokenizer, args) -> Dict:
             # audio_data_resampled = resampy.resample(batch["audio"]["array"], 48000, 16000)
             
             batch["speech"] = audio_data_resampled
-            # batch['text'] = batch["sentence"]
-            batch['text'] = batch["text"].lower()
             return batch
 
         print(f"dataset: {dataset}")
         dataset = dataset.map(
             map_to_array,
             num_proc=8,
-            remove_columns=dataset.column_names["train"]
+            # remove_columns=dataset.column_names["train"]
+            remove_columns=['file', 'audio', 'speaker_id', 'chapter_id', 'id']
         )
 
         print(f"dataset after mapping: {dataset}")
