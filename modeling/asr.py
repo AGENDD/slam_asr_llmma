@@ -47,7 +47,7 @@ class SLAM_ASR(nn.Module):
 
         """
 
-        self.language_tokenizer = AutoTokenizer.from_pretrained(language_model_id,trust_remote_code=True,pad_token="<s>")
+        self.language_tokenizer = AutoTokenizer.from_pretrained(language_model_id,trust_remote_code=True)
         self.language_model = AutoModelForCausalLM.from_pretrained(
             language_model_id,
             trust_remote_code=True,
@@ -132,7 +132,8 @@ class SLAM_ASR(nn.Module):
         input_dict2 = self.language_tokenizer(
             [self.prompt_part2], return_tensors="pt", add_special_tokens=False
         ).to(self.device)
-
+        print(input_dict1)
+        
         # precache the embeddings for prompt
         with torch.no_grad():
             inputs_embeds1 = self.language_model.model.embed_tokens(
