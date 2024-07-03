@@ -271,9 +271,9 @@ class SLAM_ASR(nn.Module):
         """
         prompt_embed, prompt_mask, _ = self._prepare_input_embeds(audios)
         outputs = self.language_model.generate(
-            inputs_embeds=prompt_embed,
+            inputs_embeds=prompt_embed.half(),
             attention_mask=prompt_mask,
-            stopping_criteria=stopping_criteria,
+            # stopping_criteria=stopping_criteria,
             max_length = max_length
         )
         return outputs
