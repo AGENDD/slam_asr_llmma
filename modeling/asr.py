@@ -141,10 +141,10 @@ class SLAM_ASR(nn.Module):
             inputs_embeds2 = self.language_model.model.embed_tokens(
                 input_dict2.input_ids
             )
-        input_dict1.to(self.device)
-        input_dict2.to(self.device)
-        inputs_embeds1.to(self.device)
-        inputs_embeds2.to(self.device)
+        # input_dict1.to(self.device)
+        # input_dict2.to(self.device)
+        # inputs_embeds1.to(self.device)
+        # inputs_embeds2.to(self.device)
         # self.language_model.to(self.device)
         
         self.embed_bank["embed1"] = inputs_embeds1
