@@ -29,7 +29,7 @@ asr = SLAM_ASR(
     train_mode="adapter",
 )
 # load the state_dict from output/adapter_weights.pt
-adapter_weight = load_file("output/checkpoint-1100/model.safetensors")
+adapter_weight = load_file("output/checkpoint-7500/model.safetensors")
 asr.load_state_dict(adapter_weight, strict=False)
 
 import resampy
@@ -57,7 +57,7 @@ for i in range(len(ds)):
     x = ds[i]["speech"]
     z = ds[i]["text"].lower()
     # asr(x)
-    print(f"Audio length:{len(x)/16000}")
+    print(f"Audio length:{len(x)/16000} s")
     print(f"Source:{z}")
     output = asr.generate(x)  # causal of shape (b, seq_len, vocab_size)
 
