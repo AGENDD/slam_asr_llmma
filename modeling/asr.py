@@ -57,7 +57,7 @@ class SLAM_ASR(nn.Module):
         # self.language_model = AutoModelForCausalLM.from_pretrained("temp_models/rwkv-6-world-1b6", trust_remote_code=True)
         
         # self.language_tokenizer.add_special_tokens({'pad_token': '[PAD]'})
-        # self.language_model.resize_token_embeddings(len(self.language_tokenizer))
+        self.language_model.resize_token_embeddings(len(self.language_tokenizer))
         
         ###
         # print("Model before lora:")
