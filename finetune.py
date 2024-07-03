@@ -316,8 +316,6 @@ def train():
     args = argparse.Namespace(
         **vars(model_args), **vars(data_args), **vars(training_args)
     )
-    # print(args)
-    training_args.deepspeed = 'ds_config.json'
     
     print(f"training args:{training_args}")
     
