@@ -55,7 +55,7 @@ references = []
 # with open("temp_audio/text.txt",'w') as f:
 for i in range(len(ds)):
     x = ds[i]["speech"]
-    z = ds[i]["text"]
+    z = ds[i]["text"].lower()
     # asr(x)
     print(f"Audio length:{len(x)}")
     print(f"Source:{z}")
@@ -63,6 +63,7 @@ for i in range(len(ds)):
 
     output = asr.language_tokenizer.batch_decode(output)[0]
     output = output.replace("[PAD]","")
+    output = output.replace("<s>","")
     print(f"Predicted: {output}")
 
     print("\n")
