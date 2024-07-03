@@ -53,7 +53,7 @@ class SLAM_ASR(nn.Module):
             trust_remote_code=True,
             torch_dtype=torch.float16,
             # token = token
-        )
+        ).to(self.device)
         # self.language_model = AutoModelForCausalLM.from_pretrained("temp_models/rwkv-6-world-1b6", trust_remote_code=True)
         
         # self.language_tokenizer.add_special_tokens({'pad_token': '[PAD]'})
@@ -76,7 +76,7 @@ class SLAM_ASR(nn.Module):
             hidden_dim=hidden_dim,
             train_mode=train_mode,
             device=device,
-        )
+        ).to(self.device)
       
         
         # print("show language params")
@@ -128,10 +128,10 @@ class SLAM_ASR(nn.Module):
     def set_embed_bank(self, batch_size=1):
         input_dict1 = self.language_tokenizer(
             [self.prompt_part1], return_tensors="pt"
-        )
+        ).to(self.device)
         input_dict2 = self.language_tokenizer(
             [self.prompt_part2], return_tensors="pt", add_special_tokens=False
-        )
+        ).to(self.device)
 
         # precache the embeddings for prompt
         with torch.no_grad():
