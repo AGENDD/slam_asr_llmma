@@ -51,6 +51,7 @@ class SLAM_ASR(nn.Module):
         self.language_model = AutoModelForCausalLM.from_pretrained(
             language_model_id,
             trust_remote_code=True,
+            torch_dtype=torch.float16,
             # token = token
         )
         # self.language_model = AutoModelForCausalLM.from_pretrained("temp_models/rwkv-6-world-1b6", trust_remote_code=True)

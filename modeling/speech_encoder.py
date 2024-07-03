@@ -35,7 +35,7 @@ class SpeechEncoder(nn.Module):
             self.processor.feature_extractor.sampling_rate / 50
         )
         self.padding_length = 320
-        self.model = AutoModel.from_pretrained(model_id).to(self.device)
+        self.model = AutoModel.from_pretrained(model_id,torch_dtype=torch.float16)
         self.model_output_dim = self.model.config.hidden_size
         self.downsample_K = downsample_K
         self.project_dim = project_dim
@@ -48,7 +48,7 @@ class SpeechEncoder(nn.Module):
             nn.Linear(self.model_output_dim * self.downsample_K, self.hidden_dim),
             nn.ReLU(),
             nn.Linear(self.hidden_dim, self.project_dim),
-        ).to(self.device)
+        )
         self.set_gradient(train_mode)
 
     def set_gradient(self, train_mode):
