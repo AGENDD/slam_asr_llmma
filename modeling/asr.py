@@ -213,7 +213,7 @@ class SLAM_ASR(nn.Module):
                 padding=True,
                 truncation=True,
                 add_special_tokens=False,
-            )
+            ).to(self.device)
             labels_embeds = self.language_model.model.embed_tokens(_labels.input_ids)
             att3 = _labels.attention_mask
             
