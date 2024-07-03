@@ -47,7 +47,7 @@ class SLAM_ASR(nn.Module):
 
         """
 
-        self.language_tokenizer = AutoTokenizer.from_pretrained(language_model_id,trust_remote_code=True)
+        self.language_tokenizer = AutoTokenizer.from_pretrained(language_model_id,trust_remote_code=True,pad_token="<pad>")
         self.language_model = AutoModelForCausalLM.from_pretrained(
             language_model_id,
             trust_remote_code=True,
