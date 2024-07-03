@@ -75,7 +75,7 @@ class SLAM_ASR(nn.Module):
             hidden_dim=hidden_dim,
             train_mode=train_mode,
             device=device,
-        ).to(self.device)
+        )
       
         
         # print("show language params")
@@ -144,7 +144,7 @@ class SLAM_ASR(nn.Module):
         input_dict2.to(self.device)
         inputs_embeds1.to(self.device)
         inputs_embeds2.to(self.device)
-        self.language_model.to(self.device)
+        # self.language_model.to(self.device)
         
         self.embed_bank["embed1"] = inputs_embeds1
         self.embed_bank["embed2"] = inputs_embeds2
