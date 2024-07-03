@@ -32,3 +32,4 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 accelerate launch --num_processes 1 --mixed_precisi
     --trust_remote_code \
     --report_to tensorboard \
     --ddp_find_unused_parameters False \
+    --deepspeed ds_config.json \
