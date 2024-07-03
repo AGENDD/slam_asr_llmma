@@ -336,7 +336,7 @@ def train():
     training_args.gradient_clip_val = 30
     training_args.deepspeed = 'ds_config.json'
     
-    
+    print(f"training args:{training_args}")
     trainer = Seq2SeqTrainer(
         model=model,
         tokenizer=tokenizer,
