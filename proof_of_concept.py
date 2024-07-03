@@ -41,7 +41,7 @@ def map_to_array(batch):
     return batch
 
 
-ds = load_dataset("mozilla-foundation/common_voice_13_0","en",split="validation")
+ds = load_dataset("librispeech_asr","clean",split="validation")
 
 ds = ds.select(range(100))
 ds = ds.map(map_to_array)
