@@ -17,7 +17,7 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 accelerate launch --num_processes 4 --mixed_precisi
     --logging_strategy steps \
     --remove_unused_columns False \
     --do_train \
-    --warmup_ratio 0.1 \
+    --warmup_ratio 0.04 \
     --lr_scheduler_type linear \
     --source_max_len 16 \
     --target_max_len 512 \
