@@ -142,7 +142,7 @@ def local_dataset(dataset_name):
 import resampy
 
 # 创建数据模块，包括训练集、验证集和预测集，以及数据整理器。
-def make_data_module(tokenizer: transformers.PreTrainedTokenizer, args) -> Dict:
+def make_data_module(args) -> Dict:
     """
     Make dataset and collator for supervised fine-tuning.
     Datasets are expected to have the following columns: { `input`, `output` }
@@ -316,8 +316,11 @@ def train():
     args = argparse.Namespace(
         **vars(model_args), **vars(data_args), **vars(training_args)
     )
-    print(args)
-
+    # print(args)
+    training_args.deepspeed = 'ds_config.json'
+    
+    print(f"training args:{training_args}")
+    
     # 2. 如果在输出目录中找到了先前的训练检查点，那么就从该检查点恢复训练。
     checkpoint_dir, completed_training = get_last_checkpoint(args.output_dir)
     if completed_training:
@@ -330,13 +333,10 @@ def train():
     print("loaded model")
     set_seed(args.seed)
 
-    data_module = make_data_module(tokenizer=tokenizer, args=args)
+    data_module = make_data_module(args=args)
 
     # 4. 加载训练器
-    training_args.gradient_clip_val = 30
-    training_args.deepspeed = 'ds_config.json'
-    
-    print(f"training args:{training_args}")
+
     trainer = Seq2SeqTrainer(
         model=model,
         tokenizer=tokenizer,
