@@ -133,7 +133,7 @@ class SLAM_ASR(nn.Module):
             [self.prompt_part2], return_tensors="pt", add_special_tokens=False
         ).to(self.device)
         print(input_dict1)
-        
+        print(input_dict2)
         # precache the embeddings for prompt
         with torch.no_grad():
             inputs_embeds1 = self.language_model.model.embed_tokens(
