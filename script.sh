@@ -17,14 +17,14 @@ CUDA_VISIBLE_DEVICES=0,1,2,3 accelerate launch --num_processes 4 --mixed_precisi
     --logging_strategy steps \
     --remove_unused_columns False \
     --do_train \
-    --warmup_ratio 0.04 \
+    --warmup_ratio 0.01 \
     --lr_scheduler_type linear \
     --source_max_len 16 \
     --target_max_len 512 \
     --per_device_train_batch_size 4 \
     --max_steps 0 \
     --num_train_epochs 50 \
-    --learning_rate 1e-4 \
+    --learning_rate 1e-3 \
     --adam_beta2 0.999 \
     --max_grad_norm 1.0 \
     --weight_decay 0.0 \
