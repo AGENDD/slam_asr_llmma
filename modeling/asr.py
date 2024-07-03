@@ -265,7 +265,7 @@ class SLAM_ASR(nn.Module):
         # print(f"true_labels:{true_labels[0]}-outputs:{true_labels[0]}",end="\r")
         return outputs
 
-    def generate(self, audios: List[float], stopping_criteria=None,max_length=100):
+    def generate(self, audios: List[float], stopping_criteria=None,max_new_tokens=100):
         """
         Generate the transcription
         """
@@ -274,7 +274,7 @@ class SLAM_ASR(nn.Module):
             inputs_embeds=prompt_embed.half(),
             attention_mask=prompt_mask,
             # stopping_criteria=stopping_criteria,
-            max_length = max_length
+            max_new_tokens=max_new_tokens
         )
         return outputs
 
