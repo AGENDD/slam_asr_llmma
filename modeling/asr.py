@@ -91,9 +91,9 @@ class SLAM_ASR(nn.Module):
 
         
 
-        self.prompt_part1 = """<|im_start|>user\n"""
+        self.prompt_part1 = """<s>user:"""
         self.prompt_part2 = (
-            """, transcribe the audio to text<|im_end|>\n<|im_start|>assistant\n"""
+            """, transcribe the audio to text</s>\n<s>assistant:"""
         )
         self.embed_bank = {"embed1": None, "embed2": None, "att1": None, "att2": None}
         self.set_embed_bank()
@@ -132,8 +132,8 @@ class SLAM_ASR(nn.Module):
         input_dict2 = self.language_tokenizer(
             [self.prompt_part2], return_tensors="pt", add_special_tokens=False
         ).to(self.device)
-        print(input_dict1)
-        print(input_dict2)
+        # print(input_dict1)
+        # print(input_dict2)
         # precache the embeddings for prompt
         with torch.no_grad():
             inputs_embeds1 = self.language_model.model.embed_tokens(
