@@ -29,14 +29,15 @@ asr = SLAM_ASR(
     train_mode="adapter",
 )
 # load the state_dict from output/adapter_weights.pt
-adapter_weight = load_file("output/rwkv/checkpoint-1200/model.safetensors")
+adapter_weight = load_file("output/checkpoint-1100/model.safetensors")
 asr.load_state_dict(adapter_weight, strict=False)
 
 import resampy
 def map_to_array(batch):
-    audio_data_resampled = resampy.resample(batch["audio"]["array"], 48000, 16000)
+    audio_data_resampled = batch["audio"]["array"]
+    # audio_data_resampled = resampy.resample(batch["audio"]["array"], 48000, 16000)
     batch["speech"] = audio_data_resampled
-    batch['text'] = batch["sentence"]
+    batch['text'] = batch["text"]
     return batch
 
 
