@@ -44,7 +44,7 @@ def map_to_array(batch):
 ds = load_dataset("librispeech_asr","clean",split="validation")
 
 # ds = ds.select(range(100))
-ds = ds.map(map_to_array,remove_columns=ds.column_names)
+ds = ds.map(map_to_array)
 
 print(ds)
 
