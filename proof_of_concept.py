@@ -9,7 +9,7 @@ import soundfile as sf
 import numpy as np
 import os
 from playsound import playsound
-import librosa
+import soundfile as sf
 
 torch.cuda.set_device(1)
 
@@ -72,7 +72,7 @@ with open("temp_audio/text.txt",'w') as f:
         f.write(f"Source:{z}")
         f.write(f"Predicted:{output}")
         f.write("\n")
-        librosa.output.write_wav(f'temp_audio/output{1}.wav', x, 16000)
+        sf.write(f'temp_audio/output{1}.wav', x, 16000)
             
         # predictions.append(output)
         # references.append(z)
