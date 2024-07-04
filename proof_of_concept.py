@@ -69,13 +69,13 @@ with open("temp_audio/text.txt",'w') as f:
         print(f"Predicted:{output}")
         print("\n")
         
-        f.write(f"Source:{z}")
-        f.write(f"Predicted:{output}")
+        f.write(f"Source:{z}\n")
+        f.write(f"Predicted:{output}\n")
         f.write("\n")
         sf.write(f'temp_audio/output{i}.wav', x, 16000)
             
-        # predictions.append(output)
-        # references.append(z)
+        predictions.append(output)
+        references.append(z)
     
 average_wer = calculate_wer(predictions, references)
 print(f"Average WER: {average_wer}")    
