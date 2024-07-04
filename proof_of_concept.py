@@ -10,7 +10,7 @@ import numpy as np
 import os
 from playsound import playsound
 import soundfile as sf
-
+import re
 torch.cuda.set_device(1)
 
 from jiwer import wer
@@ -52,6 +52,9 @@ print(ds)
 predictions = []
 references = []
 
+def contains_english(text):
+    return bool(re.search('[a-zA-Z]', text))
+
 with open("temp_audio/text.txt",'w') as f:
     for i in range(len(ds)):
         x = ds[i]["speech"]
@@ -73,10 +76,12 @@ with open("temp_audio/text.txt",'w') as f:
         f.write(f"Predicted:{output}\n")
         f.write("\n")
         sf.write(f'temp_audio/output{i}.wav', x, 16000)
-            
-        predictions.append(output)
-        references.append(z)
+        
+        if(contains_english(predictions)):
+            print("record")
+            predictions.append(output)
+            references.append(z)
     
 average_wer = calculate_wer(predictions, references)
-print(f"Average WER: {average_wer}")    
+print(f"Average WER: {average_wer}")
     
