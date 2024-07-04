@@ -52,6 +52,10 @@ print(ds)
 predictions = []
 references = []
 
+predictions_full = []
+references_full = []
+
+
 def contains_english(text):
     return bool(re.search('[a-zA-Z]', text))
 
@@ -81,8 +85,12 @@ with open("temp_audio/text.txt",'w') as f:
             print("record")
             predictions.append(output)
             references.append(z)
-    
+        predictions_full.append(output)
+        references_full.append(z)
+        
     average_wer = calculate_wer(predictions, references)
+    average_wer_full = calculate_wer(predictions_full, references_full)
     print(f"Average WER: {average_wer}")
-    
     f.write(f"wer:{average_wer}\n")
+    print(f"Full Average WER: {average_wer_full}")
+    f.write(f"wer full:{average_wer_full}\n")
