@@ -58,15 +58,16 @@ for i in range(len(ds)):
     z = ds[i]["text"].lower()
     # asr(x)
     print(f"Audio length:{len(x)/16000} s")
-    print(f"Source:\t{z}")
+    
     output = asr.generate(x)  # causal of shape (b, seq_len, vocab_size)
 
     output = asr.language_tokenizer.batch_decode(output)[0]
-    print(f"Predicted:\t{output}")
     output = output.replace("<p>","")
     output = output.replace("<s>","")
     output = output.replace("</s>","")
-
+    print(f"Source:\t{z}")
+    print(f"Predicted:\t{output}")
+    
     print("\n")
     
     predictions.append(output)
