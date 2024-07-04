@@ -29,7 +29,7 @@ asr = SLAM_ASR(
     train_mode="adapter",
 )
 # load the state_dict from output/adapter_weights.pt
-adapter_weight = load_file("output/checkpoint-900/model.safetensors")
+adapter_weight = load_file("output/checkpoint-2300/model.safetensors")
 asr.load_state_dict(adapter_weight, strict=False)
 
 import resampy
@@ -72,7 +72,7 @@ with open("temp_audio/text.txt",'w') as f:
         f.write(f"Source:{z}")
         f.write(f"Predicted:{output}")
         f.write("\n")
-        librosa.output.write_wav(f'output{1}.wav', x, 16000)
+        librosa.output.write_wav(f'temp_audio/output{1}.wav', x, 16000)
             
         # predictions.append(output)
         # references.append(z)
