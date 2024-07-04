@@ -43,8 +43,8 @@ def map_to_array(batch):
 
 ds = load_dataset("librispeech_asr","clean",split="validation")
 
-ds = ds.select(range(100))
-ds = ds.map(map_to_array)
+# ds = ds.select(range(100))
+ds = ds.map(map_to_array,remove_columns=ds.column_names)
 
 print(ds)
 
@@ -75,13 +75,14 @@ with open("temp_audio/text.txt",'w') as f:
         f.write(f"Source:{z}\n")
         f.write(f"Predicted:{output}\n")
         f.write("\n")
-        sf.write(f'temp_audio/output{i}.wav', x, 16000)
+        # sf.write(f'temp_audio/output{i}.wav', x, 16000)
         
         if(contains_english(output)):
             print("record")
             predictions.append(output)
             references.append(z)
     
-average_wer = calculate_wer(predictions, references)
-print(f"Average WER: {average_wer}")
+    average_wer = calculate_wer(predictions, references)
+    print(f"Average WER: {average_wer}")
     
+    f.write(f"wer:{average_wer}\n")
