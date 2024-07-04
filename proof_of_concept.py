@@ -72,7 +72,7 @@ with open("temp_audio/text.txt",'w') as f:
         f.write(f"Source:{z}")
         f.write(f"Predicted:{output}")
         f.write("\n")
-        sf.write(f'temp_audio/output{1}.wav', x, 16000)
+        sf.write(f'temp_audio/output{i}.wav', x, 16000)
             
         # predictions.append(output)
         # references.append(z)
