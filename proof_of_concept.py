@@ -62,9 +62,10 @@ for i in range(len(ds)):
     output = asr.generate(x)  # causal of shape (b, seq_len, vocab_size)
 
     output = asr.language_tokenizer.batch_decode(output)[0]
-    output = output.replace("[PAD]","")
-    output = output.replace("<s>","")
     print(f"Predicted:\t{output}")
+    output = output.replace("<p>","")
+    output = output.replace("<s>","")
+    output = output.replace("</s>","")
 
     print("\n")
     
