@@ -9,7 +9,7 @@ import soundfile as sf
 import numpy as np
 import os
 from playsound import playsound
-
+import librosa
 
 torch.cuda.set_device(1)
 
@@ -52,26 +52,30 @@ print(ds)
 predictions = []
 references = []
 
-# with open("temp_audio/text.txt",'w') as f:
-for i in range(len(ds)):
-    x = ds[i]["speech"]
-    z = ds[i]["text"].lower()
-    # asr(x)
-    print(f"Audio length:{len(x)/16000} s")
-    
-    output = asr.generate(x)  # causal of shape (b, seq_len, vocab_size)
+with open("temp_audio/text.txt",'w') as f:
+    for i in range(len(ds)):
+        x = ds[i]["speech"]
+        z = ds[i]["text"].lower()
+        # asr(x)
+        print(f"Audio length:{len(x)/16000} s")
+        
+        output = asr.generate(x)  # causal of shape (b, seq_len, vocab_size)
 
-    output = asr.language_tokenizer.batch_decode(output)[0]
-    output = output.replace("<p>","")
-    output = output.replace("<s>","")
-    output = output.replace("</s>","")
-    print(f"Source:\t{z}")
-    print(f"Predicted:\t{output}")
-    
-    print("\n")
-    
-    predictions.append(output)
-    references.append(z)
+        output = asr.language_tokenizer.batch_decode(output)[0]
+        output = output.replace("<p>","")
+        output = output.replace("<s>","")
+        output = output.replace("</s>","")
+        print(f"Source:{z}")
+        print(f"Predicted:{output}")
+        print("\n")
+        
+        f.write(f"Source:{z}")
+        f.write(f"Predicted:{output}")
+        f.write("\n")
+        librosa.output.write_wav(f'output{1}.wav', x, 16000)
+            
+        # predictions.append(output)
+        # references.append(z)
     
 average_wer = calculate_wer(predictions, references)
 print(f"Average WER: {average_wer}")    
