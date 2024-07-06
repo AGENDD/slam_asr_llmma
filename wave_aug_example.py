@@ -18,13 +18,13 @@ def add_noise_with_fft(data):
 
 #改变音频的速度，但不改变其音调
 def stretch(data, rate):
-    
-    input_length = len(data)
-    data = librosa.effects.time_stretch(data, rate)
-    if len(data)>input_length:
-        return data[:input_length]
-    else:
-        return np.pad(data, (0, max(0, input_length - len(data))), "constant")
+    first = librosa.defaults.stretch
+    librosa.defaults.stretch = rate
+    # input_length = len(data)
+    data = librosa.effects.time_stretch(data)
+
+    librosa.defaults.stretch = first
+    return data
 
 #改变音频的音高
 def pitch_shift(data, sample_rate, steps=-3):
