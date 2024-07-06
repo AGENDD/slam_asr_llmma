@@ -34,7 +34,7 @@ def stretch(data, rate):
 def pitch_shift(data, sample_rate, steps=-3):
     data = np.array(data)
     
-    pitches, magnitudes = librosa.piptrack(data, sr=sample_rate)
+    pitches, magnitudes = librosa.piptrack(y=data, sr=sample_rate)
     avg_pitch = np.average(pitches[np.nonzero(pitches)])
     
     print(avg_pitch)
