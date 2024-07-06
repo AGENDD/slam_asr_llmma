@@ -33,13 +33,14 @@ def stretch(data, rate):
 #改变音频的音高
 def pitch_shift(data, sample_rate, steps=-3):
     data = np.array(data)
+    
+    pitches, magnitudes = librosa.piptrack(data, sr=sample_rate)
+    avg_pitch = np.average(pitches[np.nonzero(pitches)])
+    
+    print(avg_pitch)
     return librosa.effects.pitch_shift(data,sr= sample_rate,n_steps= steps)
 
-#将音频数据向左或向右随机滚动
-def random_shift(data, roll_rate=0.1, turn = 1):
-    data = np.array(data)
-    # Roll_rate is the fraction of total length to roll
-    return np.roll(data, turn * int(len(data) * roll_rate))
+
 
 
 
@@ -47,27 +48,22 @@ def random_shift(data, roll_rate=0.1, turn = 1):
 
 train_dataset = load_from_disk("temp_datasets/en-final")
 
-data = train_dataset[0]
+datas = [train_dataset[0],train_dataset[1000], train_dataset[2000]]
 
-speech = data["speech"]
-sf.write(f'temp_audio/aug/original.wav', speech, 16000)
+for  i,data in enumerate(datas):
+    speech = data["speech"]
+    sf.write(f'temp_audio/aug/{i}_original.wav', speech, 16000)
 
-#rate = np.random.uniform(0.75, 1.25)
-temp = stretch(speech,0.75)
-sf.write(f'temp_audio/aug/stretch_down.wav', temp, 16000)
-temp = stretch(speech,1.25)
-sf.write(f'temp_audio/aug/stretch_up.wav', temp, 16000)
+    #rate = np.random.uniform(0.75, 1.25)
+    temp = stretch(speech,0.75)
+    sf.write(f'temp_audio/aug/{i}_stretch_down.wav', temp, 16000)
+    temp = stretch(speech,1.25)
+    sf.write(f'temp_audio/aug/{i}_stretch_up.wav', temp, 16000)
 
-temp = pitch_shift(speech,16000, 3)
-sf.write(f'temp_audio/aug/pitch_up.wav', temp, 16000)
-temp = pitch_shift(speech,16000, -3)
-sf.write(f'temp_audio/aug/pitch_down.wav', temp, 16000)
+    temp = pitch_shift(speech,16000, 3)
+    sf.write(f'temp_audio/aug/{i}_pitch_up.wav', temp, 16000)
+    temp = pitch_shift(speech,16000, -3)
+    sf.write(f'temp_audio/aug/{i}_pitch_down.wav', temp, 16000)
 
-temp = random_shift(speech,0.1, 1)
-sf.write(f'temp_audio/aug/shift_right.wav', temp, 16000)
-
-temp = random_shift(speech,0.1, -1)
-sf.write(f'temp_audio/aug/shift_left.wav', temp, 16000)
-
-temp = add_noise_with_fft(speech)
-sf.write(f'temp_audio/aug/noise.wav', temp, 16000)
+    temp = add_noise_with_fft(speech)
+    sf.write(f'temp_audio/aug/{i}_noise.wav', temp, 16000)
