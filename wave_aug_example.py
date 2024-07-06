@@ -3,14 +3,14 @@ import soundfile as sf
 import numpy as np
 import librosa
 #添加随机噪声
-def add_noise_with_fft(data):
+def add_noise_with_fft(data,level = 1):
     # 进行傅里叶变换
     data = np.array(data)
     
     fft_data = np.fft.fft(data)
 
     # 在频域上添加噪声
-    noise = np.random.normal(0, 1, len(fft_data))
+    noise = np.random.normal(0, level, len(fft_data))
     fft_data_noise = fft_data + noise
 
     # 进行逆傅里叶变换
@@ -55,29 +55,29 @@ def pitch_shift(data, sample_rate, steps=-3):
     return new_data
 
 
-
-
-
-
-
 train_dataset = load_from_disk("temp_datasets/en-final")
 
 datas = [train_dataset[0],train_dataset[1000], train_dataset[2000]]
 
-for  i,data in enumerate(datas):
-    speech = data["speech"]
-    sf.write(f'temp_audio/aug/{i}_original.wav', speech, 16000)
-
-    #rate = np.random.uniform(0.75, 1.25)
-    temp = stretch(speech,0.75)
-    sf.write(f'temp_audio/aug/{i}_stretch_down.wav', temp, 16000)
-    temp = stretch(speech,1.25)
-    sf.write(f'temp_audio/aug/{i}_stretch_up.wav', temp, 16000)
-
-    temp = pitch_shift(speech,16000, 3)
-    sf.write(f'temp_audio/aug/{i}_pitch_up.wav', temp, 16000)
-    temp = pitch_shift(speech,16000, -3)
-    sf.write(f'temp_audio/aug/{i}_pitch_down.wav', temp, 16000)
-
-    temp = add_noise_with_fft(speech)
+speech = datas[0]["speech"]
+for i in range(10):
+    temp = add_noise_with_fft(speech,level=i/2)
     sf.write(f'temp_audio/aug/{i}_noise.wav', temp, 16000)
+
+# for  i,data in enumerate(datas):
+#     speech = data["speech"]
+#     sf.write(f'temp_audio/aug/{i}_original.wav', speech, 16000)
+
+#     #rate = np.random.uniform(0.75, 1.25)
+#     temp = stretch(speech,0.75)
+#     sf.write(f'temp_audio/aug/{i}_stretch_down.wav', temp, 16000)
+#     temp = stretch(speech,1.25)
+#     sf.write(f'temp_audio/aug/{i}_stretch_up.wav', temp, 16000)
+
+#     temp = pitch_shift(speech,16000, 3)
+#     sf.write(f'temp_audio/aug/{i}_pitch_up.wav', temp, 16000)
+#     temp = pitch_shift(speech,16000, -3)
+#     sf.write(f'temp_audio/aug/{i}_pitch_down.wav', temp, 16000)
+
+#     temp = add_noise_with_fft(speech)
+#     sf.write(f'temp_audio/aug/{i}_noise.wav', temp, 16000)
