@@ -164,7 +164,7 @@ def make_data_module(args) -> Dict:
         print(f"dataset: {dataset}")
         dataset = dataset.map(
             map_to_array,
-            num_proc=6,
+            num_proc=8,
             # remove_columns=dataset.column_names["train"]
             remove_columns=['file', 'audio', 'speaker_id', 'chapter_id', 'id']
         )
@@ -182,7 +182,7 @@ def make_data_module(args) -> Dict:
             # 否则，返回True
             return True
 
-        dataset = dataset.filter(check_duration,num_proc=8)
+        # dataset = dataset.filter(check_duration,num_proc=8)
         # dataset.save_to_disk(temp_dataset_file)
 
         return dataset
@@ -207,7 +207,24 @@ def make_data_module(args) -> Dict:
         print("load original data")
         # dataset = load_from_disk(args.dataset)
         # dataset = load_dataset(args.dataset,LANG, token=token)
-        dataset = load_dataset(args.dataset,"clean",split="train.360")
+        dataset1 = load_dataset(args.dataset,"clean",split="train.360")
+        dataset1 = dataset1.shuffle().select(range(100000))
+        dataset2 = load_dataset(args.dataset,"other",split="train.500")
+        dataset2 = dataset2.shuffle().select(range(40000))
+        
+        
+        from datasets import concatenate_datasets
+        combined_dataset = concatenate_datasets([dataset1, dataset2])
+        
+        combined_dataset = combined_dataset.shuffle()
+        dataset = DatasetDict(
+            {
+                'train': combined_dataset
+            }
+        )
+        
+        
+        
         # train_data, test_data = train_test_split(dataset, test_size=0.1)
         # dataset = DatasetDict(
         #     {
@@ -325,13 +342,14 @@ def train():
         print("Detected that training was already completed!")
 
     # 3. 加载模型和分词器。
+    data_module = make_data_module(args=args)
     model, tokenizer = get_accelerate_model(args, checkpoint_dir)
 
     model.config.use_cache = False
     print("loaded model")
     set_seed(args.seed)
 
-    data_module = make_data_module(args=args)
+    
 
     # 4. 加载训练器
 

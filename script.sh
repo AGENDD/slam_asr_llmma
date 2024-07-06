@@ -1,4 +1,4 @@
-CUDA_VISIBLE_DEVICES=0,1,2,3 accelerate launch --num_processes 4 --mixed_precision fp16 finetune.py \
+CUDA_VISIBLE_DEVICES=0,1,2,3 accelerate launch --num_processes 1 --mixed_precision fp16 finetune.py \
     --dataset librispeech_asr \
     --split clean \
     --output_dir ./output \
