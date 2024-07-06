@@ -21,7 +21,7 @@ def stretch(data, rate):
     # first = librosa.defaults.stretch
     # librosa.defaults.stretch = rate
     # input_length = len(data)
-    data = librosa.effects.time_stretch(data,rate)
+    data = librosa.effects.time_stretch(data,rate = rate)
 
     # librosa.defaults.stretch = first
     return data
