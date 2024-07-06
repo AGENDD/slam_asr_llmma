@@ -38,7 +38,14 @@ def pitch_shift(data, sample_rate, steps=-3):
     avg_pitch = np.average(pitches[np.nonzero(pitches)])
     
     print(avg_pitch)
-    return librosa.effects.pitch_shift(data,sr= sample_rate,n_steps= steps)
+    
+    new_data = librosa.effects.pitch_shift(data,sr= sample_rate,n_steps= steps)
+    
+    pitches, magnitudes = librosa.piptrack(y=new_data, sr=sample_rate)
+    avg_pitch = np.average(pitches[np.nonzero(pitches)])
+    
+    print(f"new:{avg_pitch}")
+    return 
 
 
 
