@@ -5,6 +5,8 @@ import librosa
 #添加随机噪声
 def add_noise_with_fft(data):
     # 进行傅里叶变换
+    data = np.array(data)
+    
     fft_data = np.fft.fft(data)
 
     # 在频域上添加噪声
@@ -18,6 +20,8 @@ def add_noise_with_fft(data):
 
 #改变音频的速度，但不改变其音调
 def stretch(data, rate):
+    data = np.array(data)
+    
     # first = librosa.defaults.stretch
     # librosa.defaults.stretch = rate
     # input_length = len(data)
@@ -28,11 +32,12 @@ def stretch(data, rate):
 
 #改变音频的音高
 def pitch_shift(data, sample_rate, steps=-3):
-    
+    data = np.array(data)
     return librosa.effects.pitch_shift(data, sample_rate, steps)
 
 #将音频数据向左或向右随机滚动
 def random_shift(data, roll_rate=0.1, turn = 1):
+    data = np.array(data)
     # Roll_rate is the fraction of total length to roll
     return np.roll(data, turn * int(len(data) * roll_rate))
 
