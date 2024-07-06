@@ -15,7 +15,9 @@ def add_noise_with_fft(data):
 
     # 进行逆傅里叶变换
     data_noise = np.fft.ifft(fft_data_noise).real
-
+    if len(data_noise.shape) == 1:
+        data_noise = np.expand_dims(data_noise, axis=-1)
+        
     return data_noise
 
 #改变音频的速度，但不改变其音调
@@ -26,7 +28,8 @@ def stretch(data, rate):
     # librosa.defaults.stretch = rate
     # input_length = len(data)
     data = librosa.effects.time_stretch(data,rate = rate)
-
+    if len(data.shape) == 1:
+        data = np.expand_dims(data, axis=-1)
     # librosa.defaults.stretch = first
     return data
 
@@ -45,7 +48,11 @@ def pitch_shift(data, sample_rate, steps=-3):
     avg_pitch = np.average(pitches[np.nonzero(pitches)])
     
     print(f"new:{avg_pitch}")
-    return 
+    
+    if len(new_data.shape) == 1:
+        new_data = np.expand_dims(new_data, axis=-1)
+    
+    return new_data
 
 
 
