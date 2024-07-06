@@ -33,7 +33,7 @@ def stretch(data, rate):
 #改变音频的音高
 def pitch_shift(data, sample_rate, steps=-3):
     data = np.array(data)
-    return librosa.effects.pitch_shift(data, sample_rate, steps)
+    return librosa.effects.pitch_shift(data,sr= sample_rate,n_steps= steps)
 
 #将音频数据向左或向右随机滚动
 def random_shift(data, roll_rate=0.1, turn = 1):
