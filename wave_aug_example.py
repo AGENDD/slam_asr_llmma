@@ -18,12 +18,12 @@ def add_noise_with_fft(data):
 
 #改变音频的速度，但不改变其音调
 def stretch(data, rate):
-    first = librosa.defaults.stretch
-    librosa.defaults.stretch = rate
+    # first = librosa.defaults.stretch
+    # librosa.defaults.stretch = rate
     # input_length = len(data)
-    data = librosa.effects.time_stretch(data)
+    data = librosa.effects.time_stretch(data,rate)
 
-    librosa.defaults.stretch = first
+    # librosa.defaults.stretch = first
     return data
 
 #改变音频的音高
