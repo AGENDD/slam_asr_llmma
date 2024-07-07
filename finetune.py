@@ -209,7 +209,13 @@ def make_data_module(args) -> Dict:
         # dataset = load_dataset(args.dataset,LANG, token=token)
         dataset1 = load_dataset(args.dataset,"clean",split="train.360")
         dataset1 = dataset1.shuffle().select(range(100000))
-        dataset2 = load_dataset(args.dataset,"other",split="train.500")
+        while(True):
+            try:
+                dataset2 = load_dataset(args.dataset,"other",split="train.500")
+                break
+            except Exception as e:
+                print(e)
+        
         dataset2 = dataset2.shuffle().select(range(40000))
         
         
