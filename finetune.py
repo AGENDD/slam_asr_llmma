@@ -196,7 +196,7 @@ def make_data_module(args) -> Dict:
     TRAIN_TAG = "train"
     # Load dataset.
 
-    from datasets import DatasetDict
+    from datasets import DatasetDict,DownloadConfig
     from sklearn.model_selection import train_test_split
 
     
@@ -207,10 +207,22 @@ def make_data_module(args) -> Dict:
         print("load original data")
         # dataset = load_from_disk(args.dataset)
         # dataset = load_dataset(args.dataset,LANG, token=token)
-        dataset1 = load_dataset(args.dataset,"clean",split="Train.360", data_dir = "temp_datasets/librispeech_asr/LibriSpeech/train-clean-360")
+        while(True):
+            try:
+                dataset1 = load_dataset(args.dataset,"clean",split="Train.360", 
+                                download_config=DownloadConfig(resume_download=True))
+                break
+            except Exception as e:
+                print(e) 
         dataset1 = dataset1.shuffle().select(range(100000))
 
-        dataset2 = load_dataset(args.dataset,"other",split="Train.500",data_dir = "temp_datasets/librispeech_asr/LibriSpeech/train-other-500")
+        while(True):
+            try:
+                dataset2 = load_dataset(args.dataset,"other",split="Train.500",
+                                download_config=DownloadConfig(resume_download=True))
+                break
+            except Exception as e:
+                print(e)
         dataset2 = dataset2.shuffle().select(range(40000))
         
         print("concatenate")
