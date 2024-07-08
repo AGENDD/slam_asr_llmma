@@ -207,18 +207,13 @@ def make_data_module(args) -> Dict:
         print("load original data")
         # dataset = load_from_disk(args.dataset)
         # dataset = load_dataset(args.dataset,LANG, token=token)
-        dataset1 = load_dataset(args.dataset,"clean",split="train.360")
+        dataset1 = load_dataset(args.dataset,"clean",split="train.360", data_dir = "temp_datasets/librispeech_asr")
         dataset1 = dataset1.shuffle().select(range(100000))
-        while(True):
-            try:
-                dataset2 = load_dataset(args.dataset,"other",split="train.500")
-                break
-            except Exception as e:
-                print(e)
-        
+
+        dataset2 = load_dataset(args.dataset,"other",split="train.500",data_dir = "temp_datasets/librispeech_asr")
         dataset2 = dataset2.shuffle().select(range(40000))
         
-        
+        print("")
         from datasets import concatenate_datasets
         combined_dataset = concatenate_datasets([dataset1, dataset2])
         
@@ -238,12 +233,12 @@ def make_data_module(args) -> Dict:
         #         "test": dataset['test'],
         #     }
         # )
-        dataset = DatasetDict(
-            {
-                "train": dataset,
-                "test": dataset.select(range(100)),
-            }
-        )
+        # dataset = DatasetDict(
+        #     {
+        #         "train": dataset,
+        #         "test": dataset.select(range(100)),
+        #     }
+        # )
         dataset = format_dataset(dataset)
 
     # Split train/eval, reduce size
