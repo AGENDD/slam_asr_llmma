@@ -86,7 +86,7 @@ for ds in dss:
         # sf.write(f'temp_audio/output{i}.wav', x, 16000)
         
         if(contains_english(output)):
-            print("record")
+            # print("record")
             predictions.append(output)
             references.append(z)
         predictions_full.append(output)
