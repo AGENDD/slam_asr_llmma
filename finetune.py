@@ -208,14 +208,14 @@ def make_data_module(args) -> Dict:
         print("load original data")
         # dataset = load_from_disk(args.dataset)
         # dataset = load_dataset(args.dataset,LANG, token=token)
-        while(True):
-            try:
-                dataset1 = load_dataset(args.dataset,"clean",split="train.360", 
-                                download_config=DownloadConfig(resume_download=True))
-                break
-            except Exception as e:
-                print(e) 
-        dataset1 = dataset1.shuffle().select(range(100000))
+        # while(True):
+        #     try:
+        #         dataset1 = load_dataset(args.dataset,"clean",split="train.360", 
+        #                         download_config=DownloadConfig(resume_download=True))
+        #         break
+        #     except Exception as e:
+        #         print(e) 
+        # dataset1 = dataset1.shuffle().select(range(100000))
 
         while(True):
             try:
@@ -224,7 +224,7 @@ def make_data_module(args) -> Dict:
                 break
             except Exception as e:
                 print(e)
-        dataset2 = dataset2.shuffle().select(range(40000))
+        # dataset2 = dataset2.shuffle().select(range(40000))
 
         # while(True):
         #     try:
@@ -236,8 +236,8 @@ def make_data_module(args) -> Dict:
                 
         print("concatenate")
         from datasets import concatenate_datasets
-        combined_dataset = concatenate_datasets([dataset1, dataset2])
-        
+        # combined_dataset = concatenate_datasets([dataset1, dataset2])
+        combined_dataset = dataset2
         combined_dataset = combined_dataset.shuffle()
         dataset = DatasetDict(
             {
