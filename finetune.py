@@ -167,7 +167,7 @@ def make_data_module(args) -> Dict:
             num_proc=8,
             # remove_columns=dataset.column_names["train"]
             remove_columns=['file', 'audio', 'speaker_id', 'chapter_id', 'id'],
-            cache_file_name = "cache/map960.arrow"
+            cache_file_names ={'train':"cache/map500.arrow"} 
         )
 
         print(f"dataset after mapping: {dataset}")
@@ -289,7 +289,7 @@ def make_data_module(args) -> Dict:
             if args.group_by_length:
                 train_dataset = train_dataset.map(
                     lambda x: {"length": len(x["text"])}, num_proc=8,
-                    cache_file_name = "cache/map960-final.arrow"
+                    cache_file_name = "cache/map500-final.arrow"
                 )
                 train_dataset.save_to_disk(temp_dataset_file)
 
