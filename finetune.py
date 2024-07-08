@@ -209,21 +209,21 @@ def make_data_module(args) -> Dict:
         # dataset = load_dataset(args.dataset,LANG, token=token)
         while(True):
             try:
-                dataset1 = load_dataset(args.dataset,"clean",split="Train.360", 
+                dataset1 = load_dataset(args.dataset,"clean",split="train.360", 
                                 download_config=DownloadConfig(resume_download=True))
                 break
             except Exception as e:
                 print(e) 
-        dataset1 = dataset1.shuffle().select(range(100000))
+        # dataset1 = dataset1.shuffle().select(range(100000))
 
         while(True):
             try:
-                dataset2 = load_dataset(args.dataset,"other",split="Train.500",
+                dataset2 = load_dataset(args.dataset,"other",split="train.500",
                                 download_config=DownloadConfig(resume_download=True))
                 break
             except Exception as e:
                 print(e)
-        dataset2 = dataset2.shuffle().select(range(40000))
+        # dataset2 = dataset2.shuffle().select(range(40000))
         
         print("concatenate")
         from datasets import concatenate_datasets
