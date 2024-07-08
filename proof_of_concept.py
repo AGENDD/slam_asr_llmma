@@ -68,7 +68,7 @@ for ds in dss:
         x = ds[i]["speech"]
         z = ds[i]["text"].lower()
         # asr(x)
-        print(f"Audio length:{len(x)/16000} s")
+        # print(f"Audio length:{len(x)/16000} s")
         
         output = asr.generate(x)  # causal of shape (b, seq_len, vocab_size)
 
