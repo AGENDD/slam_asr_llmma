@@ -207,10 +207,10 @@ def make_data_module(args) -> Dict:
         print("load original data")
         # dataset = load_from_disk(args.dataset)
         # dataset = load_dataset(args.dataset,LANG, token=token)
-        dataset1 = load_dataset(args.dataset,"clean",split="train.360", data_dir = "temp_datasets/librispeech_asr/LibriSpeech/train-clean-360")
+        dataset1 = load_dataset(args.dataset,"clean",split="Train.360", data_dir = "temp_datasets/librispeech_asr/LibriSpeech/train-clean-360")
         dataset1 = dataset1.shuffle().select(range(100000))
 
-        dataset2 = load_dataset(args.dataset,"other",split="train.500",data_dir = "temp_datasets/librispeech_asr/LibriSpeech/train-other-500")
+        dataset2 = load_dataset(args.dataset,"other",split="Train.500",data_dir = "temp_datasets/librispeech_asr/LibriSpeech/train-other-500")
         dataset2 = dataset2.shuffle().select(range(40000))
         
         print("concatenate")
