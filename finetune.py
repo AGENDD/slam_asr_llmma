@@ -213,7 +213,7 @@ def make_data_module(args) -> Dict:
         dataset2 = load_dataset(args.dataset,"other",split="train.500",data_dir = "temp_datasets/librispeech_asr")
         dataset2 = dataset2.shuffle().select(range(40000))
         
-        print("")
+        print("concatenate")
         from datasets import concatenate_datasets
         combined_dataset = concatenate_datasets([dataset1, dataset2])
         
@@ -223,9 +223,6 @@ def make_data_module(args) -> Dict:
                 'train': combined_dataset
             }
         )
-        
-        
-        
         # train_data, test_data = train_test_split(dataset, test_size=0.1)
         # dataset = DatasetDict(
         #     {
