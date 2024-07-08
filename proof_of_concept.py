@@ -11,6 +11,8 @@ import os
 from playsound import playsound
 import soundfile as sf
 import re
+from tqdm import tqdm
+
 torch.cuda.set_device(1)
 
 from jiwer import wer
@@ -37,29 +39,32 @@ def map_to_array(batch):
     audio_data_resampled = batch["audio"]["array"]
     # audio_data_resampled = resampy.resample(batch["audio"]["array"], 48000, 16000)
     batch["speech"] = audio_data_resampled
-    batch['text'] = batch["text"]
+    # batch['text'] = batch["text"]
     return batch
 
 
-ds = load_dataset("librispeech_asr","clean",split="validation")
+ds1 = load_dataset("librispeech_asr","clean",split="validation")
 # ds = ds.select(range(100))
-ds = ds.map(map_to_array)
+ds1 = ds1.map(map_to_array,cache_file_name = "cache/cleanval.arrow")
 
-print(ds)
+ds2 = load_dataset("librispeech_asr","other",split="validation")
+ds2 = ds2.map(map_to_array,cache_file_name = "cache/otherval.arrow")
 
 
-predictions = []
-references = []
-
-predictions_full = []
-references_full = []
-
+dss = [ds1,ds2]
 
 def contains_english(text):
     return bool(re.search('[a-zA-Z]', text))
 
-with open("temp_audio/text.txt",'w') as f:
-    for i in range(len(ds)):
+# with open("temp_audio/text.txt",'w') as f:
+for ds in dss:
+
+    predictions = []
+    references = []
+
+    predictions_full = []
+    references_full = []
+    for i in range(tqdm(len(ds))):
         x = ds[i]["speech"]
         z = ds[i]["text"].lower()
         # asr(x)
@@ -71,13 +76,13 @@ with open("temp_audio/text.txt",'w') as f:
         output = output.replace("<p>","")
         output = output.replace("<s>","")
         output = output.replace("</s>","")
-        print(f"Source:{z}")
-        print(f"Predicted:{output}")
-        print("\n")
+        # print(f"Source:{z}")
+        # print(f"Predicted:{output}")
+        # print("\n")
         
-        f.write(f"Source:{z}\n")
-        f.write(f"Predicted:{output}\n")
-        f.write("\n")
+        # f.write(f"Source:{z}\n")
+        # f.write(f"Predicted:{output}\n")
+        # f.write("\n")
         # sf.write(f'temp_audio/output{i}.wav', x, 16000)
         
         if(contains_english(output)):
@@ -90,6 +95,6 @@ with open("temp_audio/text.txt",'w') as f:
     average_wer = calculate_wer(predictions, references)
     average_wer_full = calculate_wer(predictions_full, references_full)
     print(f"Average WER: {average_wer}")
-    f.write(f"wer:{average_wer}\n")
     print(f"Full Average WER: {average_wer_full}")
-    f.write(f"wer full:{average_wer_full}\n")
+    # f.write(f"wer:{average_wer}\n")
+    # f.write(f"wer full:{average_wer_full}\n")

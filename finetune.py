@@ -166,7 +166,8 @@ def make_data_module(args) -> Dict:
             map_to_array,
             num_proc=8,
             # remove_columns=dataset.column_names["train"]
-            remove_columns=['file', 'audio', 'speaker_id', 'chapter_id', 'id']
+            remove_columns=['file', 'audio', 'speaker_id', 'chapter_id', 'id'],
+            cache_file_name = "cache/map960.arrow"
         )
 
         print(f"dataset after mapping: {dataset}")
@@ -214,7 +215,7 @@ def make_data_module(args) -> Dict:
                 break
             except Exception as e:
                 print(e) 
-        # dataset1 = dataset1.shuffle().select(range(100000))
+        dataset1 = dataset1.shuffle().select(range(100000))
 
         while(True):
             try:
@@ -223,8 +224,16 @@ def make_data_module(args) -> Dict:
                 break
             except Exception as e:
                 print(e)
-        # dataset2 = dataset2.shuffle().select(range(40000))
-        
+        dataset2 = dataset2.shuffle().select(range(40000))
+
+        # while(True):
+        #     try:
+        #         dataset3 = load_dataset(args.dataset,"clean",split="train.100",
+        #                         download_config=DownloadConfig(resume_download=True))
+        #         break
+        #     except Exception as e:
+        #         print(e)
+                
         print("concatenate")
         from datasets import concatenate_datasets
         combined_dataset = concatenate_datasets([dataset1, dataset2])
@@ -279,7 +288,8 @@ def make_data_module(args) -> Dict:
                 train_dataset = train_dataset.select(range(args.max_train_samples))
             if args.group_by_length:
                 train_dataset = train_dataset.map(
-                    lambda x: {"length": len(x["text"])}, num_proc=8
+                    lambda x: {"length": len(x["text"])}, num_proc=8,
+                    cache_file_name = "cache/map960-final.arrow"
                 )
                 train_dataset.save_to_disk(temp_dataset_file)
 
