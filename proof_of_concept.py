@@ -64,7 +64,7 @@ for ds in dss:
 
     predictions_full = []
     references_full = []
-    for i in range(tqdm(len(ds))):
+    for i in tqdm(range(len(ds))):
         x = ds[i]["speech"]
         z = ds[i]["text"].lower()
         # asr(x)
