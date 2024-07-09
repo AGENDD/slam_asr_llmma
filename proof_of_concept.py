@@ -25,7 +25,8 @@ def calculate_wer(predictions, references):
     return average_wer
 
 asr = SLAM_ASR(
-    speech_encoder_model_id ="facebook/hubert-base-ls960",
+    # speech_encoder_model_id ="facebook/hubert-base-ls960",
+    speech_encoder_model_id ="facebook/hubert-large-ll60k",
     language_model_id="openlm-research/open_llama_7b",
     # language_model_id="temp_models/rwkv-6-world-1b6",
     train_mode="adapter",

@@ -167,7 +167,7 @@ def make_data_module(args) -> Dict:
             num_proc=8,
             # remove_columns=dataset.column_names["train"]
             remove_columns=['file', 'audio', 'speaker_id', 'chapter_id', 'id'],
-            cache_file_names ={'train':"cache/map500.arrow"} 
+            cache_file_names ={'train':"cache/map960.arrow"} 
         )
 
         print(f"dataset after mapping: {dataset}")
@@ -208,13 +208,13 @@ def make_data_module(args) -> Dict:
         print("load original data")
         # dataset = load_from_disk(args.dataset)
         # dataset = load_dataset(args.dataset,LANG, token=token)
-        # while(True):
-        #     try:
-        #         dataset1 = load_dataset(args.dataset,"clean",split="train.360", 
-        #                         download_config=DownloadConfig(resume_download=True))
-        #         break
-        #     except Exception as e:
-        #         print(e) 
+        while(True):
+            try:
+                dataset1 = load_dataset(args.dataset,"clean",split="train.360", 
+                                download_config=DownloadConfig(resume_download=True))
+                break
+            except Exception as e:
+                print(e) 
         # dataset1 = dataset1.shuffle().select(range(100000))
 
         while(True):
@@ -226,18 +226,18 @@ def make_data_module(args) -> Dict:
                 print(e)
         # dataset2 = dataset2.shuffle().select(range(40000))
 
-        # while(True):
-        #     try:
-        #         dataset3 = load_dataset(args.dataset,"clean",split="train.100",
-        #                         download_config=DownloadConfig(resume_download=True))
-        #         break
-        #     except Exception as e:
-        #         print(e)
+        while(True):
+            try:
+                dataset3 = load_dataset(args.dataset,"clean",split="train.100",
+                                download_config=DownloadConfig(resume_download=True))
+                break
+            except Exception as e:
+                print(e)
                 
         print("concatenate")
         from datasets import concatenate_datasets
-        # combined_dataset = concatenate_datasets([dataset1, dataset2])
-        combined_dataset = dataset2
+        combined_dataset = concatenate_datasets([dataset1, dataset2, dataset3])
+        # combined_dataset = dataset2
         combined_dataset = combined_dataset.shuffle()
         dataset = DatasetDict(
             {
@@ -289,7 +289,7 @@ def make_data_module(args) -> Dict:
             if args.group_by_length:
                 train_dataset = train_dataset.map(
                     lambda x: {"length": len(x["text"])}, num_proc=8,
-                    cache_file_name = "cache/map500-final.arrow"
+                    cache_file_name = "cache/map960-final.arrow"
                 )
                 train_dataset.save_to_disk(temp_dataset_file)
 
