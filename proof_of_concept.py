@@ -13,6 +13,7 @@ import soundfile as sf
 import re
 from tqdm import tqdm
 
+
 torch.cuda.set_device(1)
 
 from jiwer import wer
@@ -71,8 +72,13 @@ for ds in dss:
         # asr(x)
         # print(f"Audio length:{len(x)/16000} s")
         
+        
+        x = np.array(x, dtype=np.float32)
+        x = x.astype(np.float16)
         output = asr.generate(x)  # causal of shape (b, seq_len, vocab_size)
 
+        
+        
         output = asr.language_tokenizer.batch_decode(output)[0]
         output = output.replace("<p>","")
         output = output.replace("<s>","")
